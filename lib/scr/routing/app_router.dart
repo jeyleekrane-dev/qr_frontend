@@ -1,27 +1,17 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
-// import '../features/home/history_screen.dart';
-// import '../features/attendance/scanner_screen.dart';
-// import '../features/auth/auth_provider.dart';
-// import '../features/auth/login_screen.dart';
-// import '../features/auth/register_screen.dart';
-// import '../features/auth/splash_screen.dart';
-// import '../features/home/home_screen.dart';
-// import '../features/notifications/notification_screen.dart';
-// import '../features/profile/profile_screen.dart';
 import 'package:qr_frontend/scr/features/auth/auth_provider.dart';
 import 'package:qr_frontend/scr/features/auth/login_screen.dart';
 import 'package:qr_frontend/scr/features/auth/register_screen.dart';
 import 'package:qr_frontend/scr/features/auth/splash_screen.dart';
 import 'package:qr_frontend/scr/features/home/home_screen.dart';
-import 'package:qr_frontend/scr/features/history/history_screen.dart';
 import 'package:qr_frontend/scr/features/notifications/notification_screen.dart';
 import 'package:qr_frontend/scr/features/profile/profile_screen.dart';
 import 'package:qr_frontend/scr/features/attendance/scanner_screen.dart';
-import 'package:qr_frontend/src/features/attendance/attendance_history_screen.dart';
 
 
+import '../features/attendance/attendance_history_screen.dart';
 import 'main_wrapper.dart';
 
 

@@ -108,6 +108,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         user: userModel,
+        token: accessToken is String ? accessToken : null,
         errorMessage: null,
       );
     } on DioException catch (e) {

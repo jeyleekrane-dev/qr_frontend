@@ -9,13 +9,13 @@ class UserModel with _$UserModel {
 
     final String? id,
     required String email,
-    required String firstName,
-    required String lastName,
-    @Default(false) bool isStudent,
-    @Default(false) bool isTeacher,
+    @JsonKey(name: 'first_name') @Default('') String firstName,
+    @JsonKey(name: 'last_name') @Default('') String lastName,
+    @JsonKey(name: 'is_student') @Default(false) bool isStudent,
+    @JsonKey(name: 'is_teacher') @Default(false) bool isTeacher,
     @JsonKey(name: 'profile_picture')
     String? profilePicture,
-    @Default('') String deviceInfo,
+    @JsonKey(name: 'device_info') @Default('') String deviceInfo,
 
   }) = _UserModel;
 

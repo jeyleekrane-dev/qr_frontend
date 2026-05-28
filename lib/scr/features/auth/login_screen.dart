@@ -524,7 +524,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           backgroundColor: Colors.green,
         ),
       );
-      // context.go('/home');
+      context.go('/home');
     } else {
       final msg = ref.read(authProvider).errorMessage ?? 'Login failed';
       ScaffoldMessenger.of(context).clearSnackBars();

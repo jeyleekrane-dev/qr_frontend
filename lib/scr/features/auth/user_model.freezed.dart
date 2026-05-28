@@ -22,12 +22,17 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 mixin _$UserModel {
   String? get id => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
+  @JsonKey(name: 'first_name')
   String get firstName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'last_name')
   String get lastName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_student')
   bool get isStudent => throw _privateConstructorUsedError;
+  @JsonKey(name: 'is_teacher')
   bool get isTeacher => throw _privateConstructorUsedError;
   @JsonKey(name: 'profile_picture')
   String? get profilePicture => throw _privateConstructorUsedError;
+  @JsonKey(name: 'device_info')
   String get deviceInfo => throw _privateConstructorUsedError;
 
   /// Serializes this UserModel to a JSON map.
@@ -48,12 +53,12 @@ abstract class $UserModelCopyWith<$Res> {
   $Res call(
       {String? id,
       String email,
-      String firstName,
-      String lastName,
-      bool isStudent,
-      bool isTeacher,
+      @JsonKey(name: 'first_name') String firstName,
+      @JsonKey(name: 'last_name') String lastName,
+      @JsonKey(name: 'is_student') bool isStudent,
+      @JsonKey(name: 'is_teacher') bool isTeacher,
       @JsonKey(name: 'profile_picture') String? profilePicture,
-      String deviceInfo});
+      @JsonKey(name: 'device_info') String deviceInfo});
 }
 
 /// @nodoc
@@ -128,12 +133,12 @@ abstract class _$$UserModelImplCopyWith<$Res>
   $Res call(
       {String? id,
       String email,
-      String firstName,
-      String lastName,
-      bool isStudent,
-      bool isTeacher,
+      @JsonKey(name: 'first_name') String firstName,
+      @JsonKey(name: 'last_name') String lastName,
+      @JsonKey(name: 'is_student') bool isStudent,
+      @JsonKey(name: 'is_teacher') bool isTeacher,
       @JsonKey(name: 'profile_picture') String? profilePicture,
-      String deviceInfo});
+      @JsonKey(name: 'device_info') String deviceInfo});
 }
 
 /// @nodoc
@@ -201,12 +206,12 @@ class _$UserModelImpl extends _UserModel {
   const _$UserModelImpl(
       {this.id,
       required this.email,
-      required this.firstName,
-      required this.lastName,
-      this.isStudent = false,
-      this.isTeacher = false,
+      @JsonKey(name: 'first_name') this.firstName = '',
+      @JsonKey(name: 'last_name') this.lastName = '',
+      @JsonKey(name: 'is_student') this.isStudent = false,
+      @JsonKey(name: 'is_teacher') this.isTeacher = false,
       @JsonKey(name: 'profile_picture') this.profilePicture,
-      this.deviceInfo = ''})
+      @JsonKey(name: 'device_info') this.deviceInfo = ''})
       : super._();
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -217,20 +222,22 @@ class _$UserModelImpl extends _UserModel {
   @override
   final String email;
   @override
+  @JsonKey(name: 'first_name')
   final String firstName;
   @override
+  @JsonKey(name: 'last_name')
   final String lastName;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_student')
   final bool isStudent;
   @override
-  @JsonKey()
+  @JsonKey(name: 'is_teacher')
   final bool isTeacher;
   @override
   @JsonKey(name: 'profile_picture')
   final String? profilePicture;
   @override
-  @JsonKey()
+  @JsonKey(name: 'device_info')
   final String deviceInfo;
 
   @override
@@ -284,12 +291,12 @@ abstract class _UserModel extends UserModel {
   const factory _UserModel(
       {final String? id,
       required final String email,
-      required final String firstName,
-      required final String lastName,
-      final bool isStudent,
-      final bool isTeacher,
+      @JsonKey(name: 'first_name') final String firstName,
+      @JsonKey(name: 'last_name') final String lastName,
+      @JsonKey(name: 'is_student') final bool isStudent,
+      @JsonKey(name: 'is_teacher') final bool isTeacher,
       @JsonKey(name: 'profile_picture') final String? profilePicture,
-      final String deviceInfo}) = _$UserModelImpl;
+      @JsonKey(name: 'device_info') final String deviceInfo}) = _$UserModelImpl;
   const _UserModel._() : super._();
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
@@ -300,17 +307,22 @@ abstract class _UserModel extends UserModel {
   @override
   String get email;
   @override
+  @JsonKey(name: 'first_name')
   String get firstName;
   @override
+  @JsonKey(name: 'last_name')
   String get lastName;
   @override
+  @JsonKey(name: 'is_student')
   bool get isStudent;
   @override
+  @JsonKey(name: 'is_teacher')
   bool get isTeacher;
   @override
   @JsonKey(name: 'profile_picture')
   String? get profilePicture;
   @override
+  @JsonKey(name: 'device_info')
   String get deviceInfo;
 
   /// Create a copy of UserModel
