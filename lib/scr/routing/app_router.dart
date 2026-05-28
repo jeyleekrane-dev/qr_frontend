@@ -19,6 +19,8 @@ import 'package:qr_frontend/scr/features/history/history_screen.dart';
 import 'package:qr_frontend/scr/features/notifications/notification_screen.dart';
 import 'package:qr_frontend/scr/features/profile/profile_screen.dart';
 import 'package:qr_frontend/scr/features/attendance/scanner_screen.dart';
+import 'package:qr_frontend/src/features/attendance/attendance_history_screen.dart';
+
 
 import 'main_wrapper.dart';
 
