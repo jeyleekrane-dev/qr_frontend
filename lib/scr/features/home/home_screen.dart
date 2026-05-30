@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
@@ -32,8 +33,12 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).user;
-
-    if (user?.isStaff == 'teacher') {
+    final baseUrl =dotenv.env['API_BASE_URL'];
+    final String? rawPicPath = user?.profilePicture;
+    final String? profilePicUrl = (rawPicPath != null && rawPicPath.isNotEmpty)
+        ? (rawPicPath.startsWith('http') ? rawPicPath : '$baseUrl$rawPicPath')
+        : null;
+    if (user?.role == 'teacher') {
       return const TeacherDashboard();
     }
 
@@ -46,15 +51,83 @@ class HomeScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Welcome, ${user?.email ?? 'Student'}",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
+              // This hides the default title center-collapse behavior
+              // so our custom background layout takes center stage.
+              centerTitle: true,
+              title: const Text(
+                "Dashboard", // Elegant, minimal title when collapsed
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
               background: Container(
                 decoration: const BoxDecoration(
                   gradient: LinearGradient(
-                    colors: [Colors.blueAccent, Colors.blue],
+                    colors: [Color(0xFF1E3C72), Color(0xFF2A5298)], // Richer, modern deep blue gradient
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
+                  ),
+                ),
+                child: SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const SizedBox(height: 20), // Spacing from top
+                      // Modern Circular Avatar with a glowing border
+                      Container(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.white24, width: 4),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.15),
+                              blurRadius: 10,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
+                        ),
+                        child: CircleAvatar(
+                          radius: 40, // Larger, modern size
+                          backgroundColor: Colors.white,
+                          backgroundImage:(profilePicUrl != null && profilePicUrl.isNotEmpty)
+                              ? NetworkImage(profilePicUrl):null,
+                          child: (profilePicUrl == null || profilePicUrl.isNotEmpty) ? const Icon(
+                            Icons.person_rounded,
+                            size: 40,
+                            color: Colors.grey,
+                          ):null,
+                          // Swap to this when you have user photos:
+                          // backgroundImage: NetworkImage(user?.photoUrl ?? ''),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      // Subtitle / Greeting
+                      Text(
+                        "Welcome back,",
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+
+
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // User Email / Name
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                        child: Text(
+                          user?.email ?? "User Email",
+                          textAlign: TextAlign.center,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),

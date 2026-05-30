@@ -20,7 +20,6 @@ AuthState _$AuthStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AuthState {
-  @JsonKey()
   UserModel? get user => throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   bool get isLoading => throw _privateConstructorUsedError;
@@ -42,10 +41,7 @@ abstract class $AuthStateCopyWith<$Res> {
       _$AuthStateCopyWithImpl<$Res, AuthState>;
   @useResult
   $Res call(
-      {@JsonKey() UserModel? user,
-      String? token,
-      bool isLoading,
-      String? errorMessage});
+      {UserModel? user, String? token, bool isLoading, String? errorMessage});
 
   $UserModelCopyWith<$Res>? get user;
 }
@@ -114,10 +110,7 @@ abstract class _$$AuthStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey() UserModel? user,
-      String? token,
-      bool isLoading,
-      String? errorMessage});
+      {UserModel? user, String? token, bool isLoading, String? errorMessage});
 
   @override
   $UserModelCopyWith<$Res>? get user;
@@ -166,16 +159,12 @@ class __$$AuthStateImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$AuthStateImpl implements _AuthState {
   const _$AuthStateImpl(
-      {@JsonKey() this.user,
-      this.token,
-      this.isLoading = false,
-      this.errorMessage});
+      {this.user, this.token, this.isLoading = false, this.errorMessage});
 
   factory _$AuthStateImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthStateImplFromJson(json);
 
   @override
-  @JsonKey()
   final UserModel? user;
   @override
   final String? token;
@@ -226,7 +215,7 @@ class _$AuthStateImpl implements _AuthState {
 
 abstract class _AuthState implements AuthState {
   const factory _AuthState(
-      {@JsonKey() final UserModel? user,
+      {final UserModel? user,
       final String? token,
       final bool isLoading,
       final String? errorMessage}) = _$AuthStateImpl;
@@ -235,7 +224,6 @@ abstract class _AuthState implements AuthState {
       _$AuthStateImpl.fromJson;
 
   @override
-  @JsonKey()
   UserModel? get user;
   @override
   String? get token;

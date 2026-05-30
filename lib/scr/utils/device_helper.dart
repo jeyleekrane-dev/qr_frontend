@@ -9,7 +9,7 @@ class DeviceHelper {
     try {
       final android = await deviceInfo.androidInfo;
       // If androidInfo is supported, prefer id.
-      return android.id ?? 'unknown_android';
+      return android.id;
     } catch (_) {
       // ignore
     }

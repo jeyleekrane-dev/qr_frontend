@@ -87,7 +87,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
       GoRoute(
           path: '/forget_password',
-          builder: (context, state) =>  ForgotPasswordScreen()
+          builder: (context, state) => const ForgotPasswordScreen(),
       ),
 
     ],

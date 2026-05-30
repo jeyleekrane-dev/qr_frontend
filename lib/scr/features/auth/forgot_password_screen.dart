@@ -1,22 +1,36 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 import '../../common_widgets/custom_text_field.dart';
 import '../../utils/dio_client.dart';
 
+/// Localized loading state for the forgot password screen.
+final forgotPasswordLoadingProvider =
+    StateProvider.autoDispose<bool>((ref) => false);
 
-//simple , localization state provider for button loading animation
+/// Forgot Password Screen — converted to ConsumerStatefulWidget so that
+/// TextEditingController and GlobalKey<FormState> are properly disposed.
+class ForgotPasswordScreen extends ConsumerStatefulWidget {
+  const ForgotPasswordScreen({super.key});
 
-final forgotPasswordLoadingProvider = StateProvider.autoDispose<bool>((ref) => false);
+  @override
+  ConsumerState<ForgotPasswordScreen> createState() =>
+      _ForgotPasswordScreenState();
+}
 
-class ForgotPasswordScreen extends ConsumerWidget {
-  ForgotPasswordScreen({super.key});
-
-  final  _formKey =  GlobalKey<FormState>();
+class _ForgotPasswordScreenState extends ConsumerState<ForgotPasswordScreen> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
 
-  void _handleReset(BuildContext context, WidgetRef ref) async {
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _handleReset() async {
     if (!_formKey.currentState!.validate()) return;
 
     final loadingNotifier = ref.read(forgotPasswordLoadingProvider.notifier);
@@ -25,85 +39,209 @@ class ForgotPasswordScreen extends ConsumerWidget {
     try {
       final dio = ref.read(dioProvider);
 
-      // Hit your clean Django rest-auth endpoint
-      await dio.post('auth/password-reset/', data: {
+      await dio.post('api/v1/password-reset/', data: {
         'email': _emailController.text.trim(),
       });
 
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text("Reset link sent! Check your institutional inbox."),
-            backgroundColor: Colors.green,
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Reset link sent! Check your institutional inbox.',
+            style: GoogleFonts.inter(fontWeight: FontWeight.w500),
           ),
-        );
-        Navigator.pop(context);
-      }
+          backgroundColor: const Color(0xff10b981),
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
+      Navigator.pop(context);
     } on DioException catch (e) {
-      if (context.mounted) {
-        final errorMsg = e.response?.data['detail'] ?? "Failed to request reset.";
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(errorMsg), backgroundColor: Colors.red),
-        );
+      if (!mounted) return;
+
+      final data = e.response?.data;
+      String errorMsg = 'Failed to request reset.';
+      if (data is Map) {
+        errorMsg = data['detail']?.toString() ??
+            data['error']?.toString() ??
+            errorMsg;
       }
+
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            errorMsg,
+            style: GoogleFonts.inter(fontWeight: FontWeight.w500),
+          ),
+          backgroundColor: const Color(0xffef4444),
+          behavior: SnackBarBehavior.floating,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
     } finally {
-      loadingNotifier.state = false;
+      if (mounted) {
+        loadingNotifier.state = false;
+      }
     }
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final isLoading = ref.watch(forgotPasswordLoadingProvider);
 
     return Scaffold(
-      appBar: AppBar(elevation: 0, backgroundColor: Colors.transparent),
+      backgroundColor: const Color(0xfff8fafc),
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        foregroundColor: const Color(0xff0f172a),
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: const EdgeInsets.symmetric(horizontal: 28.0),
           child: Form(
             key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  "Reset Password",
-                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, letterSpacing: -0.5),
+                // Icon accent
+                Container(
+                  height: 48,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xfff59e0b), Color(0xfffbbf24)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(14),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xfff59e0b).withOpacity(0.25),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
+                  ),
+                  child: const Icon(Icons.lock_reset_rounded,
+                      color: Colors.white, size: 28),
+                ),
+                const SizedBox(height: 24),
+
+                Text(
+                  'Reset Password',
+                  style: GoogleFonts.plusJakartaSans(
+                    fontSize: 28,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                    color: const Color(0xff0f172a),
+                  ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  "Enter your institutional email registered with uLearning to receive recovery steps.",
-                  style: TextStyle(color: Colors.grey, fontSize: 14, height: 1.4),
+                Text(
+                  'Enter the institutional email registered with your account to receive recovery steps.',
+                  style: GoogleFonts.inter(
+                    fontSize: 15,
+                    color: const Color(0xff64748b),
+                    height: 1.5,
+                  ),
                 ),
                 const SizedBox(height: 32),
 
-                // Using your project's custom text field widget
-                CustomTextField(
-                  controller: _emailController,
-
-                  hintText: "e.g., lecturer@ulearning.edu.ng",
-                  labelText: "Institutional Email",
-                  prefixIcon: const Icon(Icons.alternate_email_rounded, size: 20),
-
-                  validator: (value) => (value == null || !value.contains('@'))
-                      ? "Please enter a valid institutional email"
-                      : null,
+                // Form card
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                        color: const Color(0xffe2e8f0), width: 1),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xff0f172a).withOpacity(0.03),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: CustomTextField(
+                    label: 'Institutional Email',
+                    icon: Icons.alternate_email_rounded,
+                    controller: _emailController,
+                    hintText: 'e.g., lecturer@university.edu',
+                    validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Email is required';
+                      }
+                      if (!value.contains('@')) {
+                        return 'Please enter a valid institutional email';
+                      }
+                      return null;
+                    },
+                  ),
                 ),
                 const SizedBox(height: 32),
 
+                // Submit button
                 SizedBox(
                   width: double.infinity,
-                  height: 54,
-                  child: ElevatedButton(
-                    onPressed: isLoading ? null : () => _handleReset(context, ref),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.blueAccent,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+                  height: 56,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                      gradient: isLoading
+                          ? null
+                          : const LinearGradient(
+                              colors: [Color(0xffd97706), Color(0xfff59e0b)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                      boxShadow: isLoading
+                          ? []
+                          : [
+                              BoxShadow(
+                                color: const Color(0xfff59e0b)
+                                    .withOpacity(0.3),
+                                blurRadius: 16,
+                                offset: const Offset(0, 6),
+                              ),
+                            ],
                     ),
-                    child: isLoading
-                        ? const SizedBox(height: 20, width: 20, child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2))
-                        : const Text("Send Reset Link", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    child: ElevatedButton(
+                      onPressed: isLoading ? null : _handleReset,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.white,
+                        shadowColor: Colors.transparent,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        disabledBackgroundColor: const Color(0xffcbd5e1),
+                      ),
+                      child: isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : Text(
+                              'Send Reset Link',
+                              style: GoogleFonts.plusJakartaSans(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 0.3,
+                              ),
+                            ),
+                    ),
                   ),
                 ),
               ],

@@ -8,7 +8,7 @@ part 'auth_state.g.dart';
 @freezed
 class AuthState with _$AuthState {
   const factory AuthState({
-    @JsonKey() UserModel? user,
+    UserModel? user,
     String? token,
     @Default(false) bool isLoading,
     String? errorMessage,
@@ -17,6 +17,3 @@ class AuthState with _$AuthState {
   factory AuthState.fromJson(Map<String, dynamic> json) =>
       _$AuthStateFromJson(json);
 }
-
-
-
