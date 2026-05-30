@@ -1,5 +1,4 @@
 import 'dart:developer' as developer;
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -62,7 +61,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// Turn "confirm_password" → "Confirm password" for user-facing messages.
   String _humaniseFieldName(String field) {
-    return field.replaceAll('_', ' ').replaceRange(0, 1, field[0].toUpperCase());
+    return field
+        .replaceAll('_', ' ')
+        .replaceRange(0, 1, field[0].toUpperCase());
   }
 
   /// Extract token from various common backend response shapes.
@@ -210,8 +211,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
 
       final userData = data['user'];
-      final userModel =
-          userData != null ? UserModel.fromJson(userData as Map<String, dynamic>) : null;
+      final userModel = userData != null
+          ? UserModel.fromJson(userData as Map<String, dynamic>)
+          : null;
 
       state = AuthState(
         token: accessToken,
