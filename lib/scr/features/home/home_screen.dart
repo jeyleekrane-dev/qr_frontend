@@ -33,11 +33,14 @@ class HomeScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user = ref.watch(authProvider).user;
-    final baseUrl =dotenv.env['API_BASE_URL'];
+    final String baseUrl = dotenv.env['API_BASE_URL'] ?? '';
     final String? rawPicPath = user?.profilePicture;
+
     final String? profilePicUrl = (rawPicPath != null && rawPicPath.isNotEmpty)
-        ? (rawPicPath.startsWith('http') ? rawPicPath : '$baseUrl$rawPicPath')
-        : null;
+    ? (rawPicPath.startsWith('http') 
+        ? rawPicPath 
+        : '${baseUrl.replaceAll(RegExp(r'/+$'), '')}/${rawPicPath.replaceAll(RegExp(r'^/+'), '')}')
+    : null;
     if (user?.role == 'teacher') {
       return const TeacherDashboard();
     }
@@ -87,15 +90,20 @@ class HomeScreen extends ConsumerWidget {
                         child: CircleAvatar(
                           radius: 40, // Larger, modern size
                           backgroundColor: Colors.white,
-                          backgroundImage:(profilePicUrl != null && profilePicUrl.isNotEmpty)
-                              ? NetworkImage(profilePicUrl):null,
-                          child: (profilePicUrl == null || profilePicUrl.isNotEmpty) ? const Icon(
-                            Icons.person_rounded,
-                            size: 40,
-                            color: Colors.grey,
-                          ):null,
-                          // Swap to this when you have user photos:
-                          // backgroundImage: NetworkImage(user?.photoUrl ?? ''),
+                          // 2. Your updated CircleAvatar properties:
+                      backgroundImage: (profilePicUrl != null && profilePicUrl.isNotEmpty)
+                          ? NetworkImage(profilePicUrl)
+                          : null,
+
+                      // Only display the icon when there is NO valid image profilePicUrl available
+                      child: (profilePicUrl == null || profilePicUrl.isEmpty) 
+                          ? const Icon(
+                              Icons.person_rounded,
+                              size: 40,
+                              color: Colors.grey,
+                            )
+                          : null,
+                        
                         ),
                       ),
                       const SizedBox(height: 10),
