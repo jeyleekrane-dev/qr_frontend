@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../../common_widgets/custom_text_field.dart';
 import 'auth_provider.dart';
@@ -18,7 +19,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
   final _confirmPasswordController = TextEditingController();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  String _selectedRole = 'student'; // 'student' or 'teacher'
+  String? _selectedRole ; // = 'student'; // Default role can be set to student or teacher based on your preference
 
   @override
   void dispose() {
@@ -192,7 +193,7 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
                   children: [
                     const Text("Already have an account? "),
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
+                      onTap: () => context.go('/login'),
                       child: Text(
                         "Sign In",
                         style: TextStyle(
@@ -261,6 +262,18 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
     final email = _emailController.text.trim();
     final password = _passwordController.text;
     final confirmPassword = _confirmPasswordController.text;
+    //1.validate guard: stop if no role is selected
+    if (_selectedRole == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please select a role (Student or Teacher).'),
+          backgroundColor: Colors.orangeAccent,
+        ),
+      );
+      return;
+    }
+
+    //2.validate guard: stop if any field is empty
 
     if (firstName.isEmpty ||
         lastName.isEmpty ||
@@ -291,7 +304,8 @@ class _RegisterScreenState extends ConsumerState<RegisterScreen> {
           password: password,
           firstName: firstName,
           lastName: lastName,
-          role: _selectedRole,
+          role: _selectedRole!, // Non-null assertion either student or teacher, safe to use here due to guard above
         );
   }
 }
+

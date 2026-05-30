@@ -46,7 +46,7 @@ class HomeScreen extends ConsumerWidget {
             floating: false,
             pinned: true,
             flexibleSpace: FlexibleSpaceBar(
-              title: Text("Welcome, ${user?.firstName ?? 'Student'}",
+              title: Text("Welcome, ${user?.email ?? 'Student'}",
                   style: const TextStyle(
                       fontSize: 16, fontWeight: FontWeight.bold)),
               background: Container(

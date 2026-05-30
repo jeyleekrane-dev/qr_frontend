@@ -6,6 +6,7 @@ import 'auth_state.dart';
 import 'user_model.dart';
 import '../../utils/storage_provider.dart';
 import '../../utils/dio_client.dart';
+
 /// Auth Provider
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(
@@ -16,7 +17,6 @@ final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 
 /// Auth Notifier
 class AuthNotifier extends StateNotifier<AuthState> {
-
   final Dio _dio;
   final FlutterSecureStorage _storage;
 
@@ -25,7 +25,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// Check token during splash screen
   Future<void> checkAuthStatus() async {
     final token = await _storage.read(key: 'access_token');
-    
+
     // Optional: If you saved user data locally, you could read it here.
     // For now, we restore the token state.
     if (token != null) {
@@ -81,9 +81,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       // Common patterns:
       // 1) {access:..., refresh:..., user:{...}}
       // 2) {tokens:{access:..., refresh:...}, user:{...}}
-      final accessToken = response.data['access'] ?? response.data['token'] ?? response.data['access_token'];
-      final refreshToken = response.data['refresh'] ?? response.data['refresh_token'];
-      final userData = response.data['user'] ?? response.data['profile'] ?? response.data['data'];
+      final accessToken = response.data['access'] ??
+          response.data['token'] ??
+          response.data['access_token'];
+      final refreshToken =
+          response.data['refresh'] ?? response.data['refresh_token'];
+      final userData = response.data['user'] ??
+          response.data['profile'] ??
+          response.data['data'];
 
       if (accessToken is String) {
         await _storage.write(key: 'access_token', value: accessToken);
@@ -112,10 +117,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         errorMessage: null,
       );
     } on DioException catch (e) {
-
-
-      final errorMessage =
-          e.response?.data['detail']?.toString() ??
+      final errorMessage = e.response?.data['detail']?.toString() ??
           e.response?.data['error']?.toString() ??
           'Register failed';
       state = state.copyWith(isLoading: false, errorMessage: errorMessage);
@@ -139,8 +141,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
         },
       );
 
-      final accessToken =
-          response.data['access'] ??
+      final accessToken = response.data['access'] ??
           response.data['token'] ??
           response.data['access_token'];
       final refreshToken =
@@ -168,8 +169,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       return true;
     } on DioException catch (e) {
-      final errorMessage =
-          e.response?.data['detail']?.toString() ??
+      final errorMessage = e.response?.data['detail']?.toString() ??
           e.response?.data['error']?.toString() ??
           'Login failed';
 
@@ -184,13 +184,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-
   /// Logout
   Future<void> logout() async {
     try {
-      await _dio.post('api/v1/logout/');
-    } catch (_) {
+      final refreshToken = await _storage.read(key: 'refresh_token');
+      await _dio.post('api/v1/logout/', data: {'refresh': refreshToken});
+    } catch (e) {
       // ignore and still clear locally
+      print(e);
     }
 
     await _storage.deleteAll();
@@ -201,5 +202,4 @@ class AuthNotifier extends StateNotifier<AuthState> {
       isLoading: false,
     );
   }
-
 }

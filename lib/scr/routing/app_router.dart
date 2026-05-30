@@ -12,6 +12,7 @@ import 'package:qr_frontend/scr/features/attendance/scanner_screen.dart';
 
 
 import '../features/attendance/attendance_history_screen.dart';
+import '../features/auth/forgot_password_screen.dart';
 import 'main_wrapper.dart';
 
 
@@ -81,9 +82,13 @@ final routerProvider = Provider<GoRouter>((ref) {
         builder: (context, state) => const ScannerScreen(),
       ),
       GoRoute(
-  path: '/notifications',
-  builder: (context, state) => const NotificationScreen(),
-),
+        path: '/notifications',
+        builder: (context, state) => const NotificationScreen(),
+      ),
+      GoRoute(
+          path: '/forget_password',
+          builder: (context, state) =>  ForgotPasswordScreen()
+      ),
 
     ],
   );

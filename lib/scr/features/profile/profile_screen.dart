@@ -10,7 +10,7 @@ class ProfileScreen extends ConsumerWidget {
     final user = ref.watch(authProvider).user;
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Account"), centerTitle: true),
+      appBar: AppBar(title: const Text("My Account"), centerTitle: true),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -39,7 +39,7 @@ class ProfileScreen extends ConsumerWidget {
           
           ListTile(
             onTap: () => ref.read(authProvider.notifier).logout(),
-            leading: const Icon(Icons.logout, color: Colors.red),
+            leading: const Icon(Icons.logout, color: Colors.lightBlueAccent),
             title: const Text("Logout", style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold)),
           ),
         ],
