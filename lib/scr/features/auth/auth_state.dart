@@ -1,19 +1,16 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-
 import 'user_model.dart';
 
 part 'auth_state.freezed.dart';
-part 'auth_state.g.dart';
+
+// ✅ Removed fromJson/toJson — auth state is runtime-only, never persisted
+// ✅ Removed isLoading — each feature provider (login/register) owns its loading
+// ✅ Removed errorMessage — each feature provider owns its errors
 
 @freezed
-class AuthState with _$AuthState {
+abstract class AuthState with _$AuthState {
   const factory AuthState({
     UserModel? user,
     String? token,
-    @Default(false) bool isLoading,
-    String? errorMessage,
   }) = _AuthState;
-
-  factory AuthState.fromJson(Map<String, dynamic> json) =>
-      _$AuthStateFromJson(json);
 }

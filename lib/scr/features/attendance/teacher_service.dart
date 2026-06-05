@@ -5,7 +5,7 @@ import '../../utils/dio_client.dart';
 part 'teacher_service.g.dart';
 
 @riverpod
-TeacherService teacherService(TeacherServiceRef ref) {
+TeacherService teacherService(Ref ref) {
   final dio = ref.watch(dioProvider);
   return TeacherService(dio);
 }

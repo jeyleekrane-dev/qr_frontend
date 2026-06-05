@@ -11,8 +11,11 @@ class CustomTextField extends StatelessWidget {
   final String? labelText;
   final TextInputType? keyboardType;
   final Icon? prefixIcon;
+  final void Function(String?)? onChange;
+
 
   const CustomTextField({
+    this.onChange,
     super.key,
     this.label,
     this.icon,
@@ -43,6 +46,7 @@ class CustomTextField extends StatelessWidget {
           const SizedBox(height: 8),
         ],
         TextFormField(
+          onChanged: onChange,
           controller: controller,
           obscureText: isPassword,
           keyboardType: keyboardType,

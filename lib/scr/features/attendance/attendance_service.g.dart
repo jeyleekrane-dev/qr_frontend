@@ -6,23 +6,52 @@ part of 'attendance_service.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$attendanceServiceHash() => r'f9f1aa64c97dbd6ef0a57bddf6ab88d1ad28e490';
+// GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: type=lint, type=warning
 
-/// See also [attendanceService].
 @ProviderFor(attendanceService)
-final attendanceServiceProvider =
-    AutoDisposeProvider<AttendanceService>.internal(
-  attendanceService,
-  name: r'attendanceServiceProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : _$attendanceServiceHash,
-  dependencies: null,
-  allTransitiveDependencies: null,
-);
+final attendanceServiceProvider = AttendanceServiceProvider._();
 
-@Deprecated('Will be removed in 3.0. Use Ref instead')
-// ignore: unused_element
-typedef AttendanceServiceRef = AutoDisposeProviderRef<AttendanceService>;
-// ignore_for_file: type=lint
-// ignore_for_file: subtype_of_sealed_class, invalid_use_of_internal_member, invalid_use_of_visible_for_testing_member, deprecated_member_use_from_same_package
+final class AttendanceServiceProvider
+    extends
+        $FunctionalProvider<
+          AttendanceService,
+          AttendanceService,
+          AttendanceService
+        >
+    with $Provider<AttendanceService> {
+  AttendanceServiceProvider._()
+    : super(
+        from: null,
+        argument: null,
+        retry: null,
+        name: r'attendanceServiceProvider',
+        isAutoDispose: true,
+        dependencies: null,
+        $allTransitiveDependencies: null,
+      );
+
+  @override
+  String debugGetCreateSourceHash() => _$attendanceServiceHash();
+
+  @$internal
+  @override
+  $ProviderElement<AttendanceService> $createElement(
+    $ProviderPointer pointer,
+  ) => $ProviderElement(pointer);
+
+  @override
+  AttendanceService create(Ref ref) {
+    return attendanceService(ref);
+  }
+
+  /// {@macro riverpod.override_with_value}
+  Override overrideWithValue(AttendanceService value) {
+    return $ProviderOverride(
+      origin: this,
+      providerOverride: $SyncValueProvider<AttendanceService>(value),
+    );
+  }
+}
+
+String _$attendanceServiceHash() => r'd9ba7cfbe4aba75aa6b6cb464c1ec5c8d63c8833';

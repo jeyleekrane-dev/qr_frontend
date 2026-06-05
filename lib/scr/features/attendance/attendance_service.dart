@@ -6,7 +6,8 @@ import '../../utils/dio_client.dart';
 part 'attendance_service.g.dart';
 
 @riverpod
-AttendanceService attendanceService(AttendanceServiceRef ref) { // Fixed Ref type name
+AttendanceService attendanceService(Ref ref) {
+  // Fixed Ref type name
   final dio = ref.watch(dioProvider);
   return AttendanceService(dio);
 }
@@ -40,7 +41,8 @@ class AttendanceService {
         "lat": position.latitude,
         "lng": position.longitude,
         "device_id": deviceId,
-        "captured_at": DateTime.now().toIso8601String(), // Good for offline sync tracking
+        "captured_at": DateTime.now()
+            .toIso8601String(), // Good for offline sync tracking
       },
     );
   }
